@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Group Chat · Campus Collab</title>
+
+  <style>
+    * {
+      box-sizing: border-box;
+      font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+    }
+
+    body {
+      margin: 0;
+      height: 100vh;
+      display: flex;
+      background:
+        linear-gradient(rgba(2,6,23,0.9), rgba(2,6,23,0.9)),
+        url("https://images.unsplash.com/photo-1517248135467-4c7edcad34c4");
+      background-size: cover;
+      background-position: center;
+      color: #e5e7eb;
+    }
+
+    /* ---------- SIDEBAR ---------- */
+    .sidebar {
+      width: 240px;
+      border-right: 1px solid #1e293b;
+      background: rgba(2,6,23,0.9);
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .sidebar h3 {
+      margin: 0 0 15px;
+      color: #a5b4fc;
+      font-size: 1.1rem;
+    }
+
+    .online-users {
+      flex: 1;
+      overflow-y: auto;
+      font-size: 0.9rem;
+    }
+
+    .user {
+      padding: 8px 6px;
+      border-radius: 8px;
+      margin-bottom: 6px;
+      background: rgba(148,163,184,0.12);
+    }
+
+    /* ---------- CHAT AREA ---------- */
+    .chat-container {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+    }
+
+    header {
+      padding: 16px 25px;
+      display: flex;
+      align-items: center;
+      gap: 15px;
+      backdrop-filter: blur(10px);
+      background: rgba(2,6,23,0.7);
+      border-bottom: 1px solid #1e293b;
+    }
+
+    header h2 {
+      margin: 0;
+      color: #a5b4fc;
+      font-size: 1.4rem;
+    }
+
+    header a {
+      color: #9ca3af;
+      text-decoration: none;
+      font-size: 0.9rem;
+    }
+
+    header a:hover {
+      color: #c7d2fe;
+    }
+
+    .chat-box {
+      flex: 1;
+      padding: 25px;
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+      gap: 18px;
+    }
+
+    .message {
+      max-width: 70%;
+      animation: fadeUp 0.2s ease forwards;
+    }
+
+    .sender {
+      font-size: 0.75rem;
+      margin-bottom: 4px;
+      font-weight: 600;
+    }
+
+    .bubble {
+      padding: 12px 14px;
+      border-radius: 14px;
+      font-size: 0.95rem;
+      line-height: 1.4;
+      border: 1px solid;
+    }
+
+    .you {
+      align-self: flex-end;
+      text-align: right;
+    }
+
+    .you .sender {
+      color: #c7d2fe;
+    }
+
+    .you .bubble {
+      background: rgba(79,70,229,0.35);
+      border-color: rgba(79,70,229,0.6);
+    }
+
+    .other {
+      align-self: flex-start;
+      text-align: left;
+    }
+
+    .other .sender {
+      color: #a5b4fc;
+    }
+
+    .other .bubble {
+      background: rgba(148,163,184,0.12);
+      border-color: rgba(148,163,184,0.3);
+    }
+
+    .typing {
+      font-size: 0.8rem;
+      color: #9ca3af;
+      margin-left: 25px;
+      margin-bottom: 6px;
+    }
+
+    .input-area {
+      padding: 16px 20px;
+      border-top: 1px solid #1e293b;
+      background: rgba(2,6,23,0.85);
+      display: flex;
+      gap: 12px;
+    }
+
+    input {
+      flex: 1;
+      padding: 14px;
+      border-radius: 14px;
+      border: 1px solid #1e293b;
+      background: #020617;
+      color: #e5e7eb;
+      outline: none;
+    }
+
+    button {
+      padding: 14px 20px;
+      border-radius: 30px;
+      border: none;
+      background: #4f46e5;
+      color: white;
+      cursor: pointer;
+    }
+
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(6px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- SIDEBAR -->
+  <div class="sidebar">
+    <h3>🟢 Online</h3>
+    <div class="online-users" id="onlineUsers"></div>
+  </div>
+
+  <!-- CHAT -->
+  <div class="chat-container">
+    <header>
+      <a href="dashboard.html">⬅ Dashboard</a>
+      <h2>💬 Campus Group Chat</h2>
+    </header>
+
+    <div class="chat-box" id="chatBox"></div>
+    <div class="typing" id="typing"></div>
+
+    <div class="input-area">
+      <input id="messageInput" placeholder="Type a message…" autocomplete="off" />
+      <button onclick="sendMessage()">Send</button>
+    </div>
+  </div>
+
+  <!-- Socket.IO -->
+  <script src="/socket.io/socket.io.js"></script>
+
+  <script>
+    const user = JSON.parse(localStorage.getItem("user"));
+    if (!user) window.location.href = "login.html";
+
+    const socket = io();
+    const chatBox = document.getElementById("chatBox");
+    const input = document.getElementById("messageInput");
+    const typingDiv = document.getElementById("typing");
+    const onlineUsersDiv = document.getElementById("onlineUsers");
+
+    // 🔐 Register user
+    socket.emit("join", {
+      userId: user.id,
+      userName: user.name
+    });
+
+    function sendMessage() {
+      const text = input.value.trim();
+      if (!text) return;
+      socket.emit("sendMessage", text);
+      input.value = "";
+      socket.emit("stopTyping");
+    }
+
+    input.addEventListener("keydown", () => {
+      socket.emit("typing");
+    });
+
+    input.addEventListener("keyup", (e) => {
+      if (e.key === "Enter") sendMessage();
+    });
+
+    socket.on("receiveMessage", msg => {
+      const isYou = msg.senderId === user.id;
+
+      const div = document.createElement("div");
+      div.className = `message ${isYou ? "you" : "other"}`;
+      div.innerHTML = `
+        <div class="sender">${isYou ? "You" : msg.senderName}</div>
+        <div class="bubble">${msg.text}</div>
+      `;
+
+      chatBox.appendChild(div);
+      chatBox.scrollTop = chatBox.scrollHeight;
+    });
+
+    socket.on("typing", name => {
+      typingDiv.innerText = `${name} is typing...`;
+    });
+
+    socket.on("stopTyping", () => {
+      typingDiv.innerText = "";
+    });
+
+    socket.on("onlineUsers", users => {
+      onlineUsersDiv.innerHTML = "";
+      users.forEach(u => {
+        const div = document.createElement("div");
+        div.className = "user";
+        div.innerText = u;
+        onlineUsersDiv.appendChild(div);
+      });
+    });
+  </script>
+
+</body>
+</html>
+

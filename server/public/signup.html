@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Create Account · Campus Collab</title>
+
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+    }
+
+    body {
+      min-height: 100vh;
+      background:
+        linear-gradient(rgba(2,6,23,0.8), rgba(2,6,23,0.8)),
+        url("https://images.unsplash.com/photo-1522202176988-66273c2fd55f");
+      background-size: cover;
+      background-position: center;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #e5e7eb;
+    }
+
+    .card {
+      background-color: #020617;
+      border: 1px solid #1e293b;
+      border-radius: 20px;
+      padding: 45px 38px;
+      width: 100%;
+      max-width: 440px;
+      animation: fadeSlide 1.3s ease forwards;
+      box-shadow: 0 20px 40px rgba(0,0,0,0.5);
+    }
+
+    h1 {
+      text-align: center;
+      font-size: 2.2rem;
+      margin-bottom: 6px;
+      color: #a5b4fc;
+    }
+
+    .subtitle {
+      text-align: center;
+      font-size: 0.95rem;
+      color: #cbd5f5;
+      margin-bottom: 28px;
+    }
+
+    .message {
+      display: none;
+      padding: 11px;
+      border-radius: 10px;
+      font-size: 0.85rem;
+      margin-bottom: 18px;
+      text-align: center;
+    }
+
+    .error {
+      background: rgba(239,68,68,0.15);
+      border: 1px solid #ef4444;
+      color: #fecaca;
+    }
+
+    .success {
+      background: rgba(34,197,94,0.15);
+      border: 1px solid #22c55e;
+      color: #bbf7d0;
+    }
+
+    .field {
+      position: relative;
+      margin-bottom: 22px;
+    }
+
+    input {
+      width: 100%;
+      padding: 14px;
+      border-radius: 12px;
+      border: 1px solid #1e293b;
+      background-color: #020617;
+      color: #e5e7eb;
+      font-size: 0.95rem;
+      outline: none;
+    }
+
+    input:focus {
+      border-color: #4f46e5;
+      box-shadow: 0 0 12px rgba(79,70,229,0.6);
+    }
+
+    label {
+      position: absolute;
+      top: -9px;
+      left: 14px;
+      background-color: #020617;
+      padding: 0 6px;
+      font-size: 0.75rem;
+      color: #c7d2fe;
+    }
+
+    button {
+      width: 100%;
+      padding: 14px;
+      margin-top: 12px;
+      border-radius: 30px;
+      border: none;
+      background-color: #4f46e5;
+      color: white;
+      font-size: 1rem;
+      cursor: pointer;
+    }
+
+    button:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+    }
+
+    .footer-text {
+      text-align: center;
+      font-size: 0.85rem;
+      margin-top: 20px;
+      color: #9ca3af;
+    }
+
+    .footer-text a {
+      color: #a5b4fc;
+      text-decoration: none;
+    }
+
+    @keyframes fadeSlide {
+      from { opacity: 0; transform: translateY(35px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="card">
+    <h1>Create Account</h1>
+    <p class="subtitle">Join your campus community today</p>
+
+    <div id="errorMsg" class="message error"></div>
+    <div id="successMsg" class="message success"></div>
+
+    <form>
+      <div class="field">
+        <label>Full Name</label>
+        <input id="name" type="text" />
+      </div>
+
+      <div class="field">
+        <label>Email</label>
+        <input id="email" type="email" />
+      </div>
+
+      <div class="field">
+        <label>Password</label>
+        <input id="password" type="password" />
+      </div>
+
+      <button id="signupBtn" type="button">Create Account</button>
+    </form>
+
+    <div class="footer-text">
+      Already have an account?
+      <a href="login.html">Sign In</a>
+    </div>
+  </div>
+
+<script>
+  const nameInput = document.getElementById("name");
+  const emailInput = document.getElementById("email");
+  const passwordInput = document.getElementById("password");
+  const signupBtn = document.getElementById("signupBtn");
+
+  const errorMsg = document.getElementById("errorMsg");
+  const successMsg = document.getElementById("successMsg");
+
+  function showError(msg) {
+    successMsg.style.display = "none";
+    errorMsg.innerText = msg;
+    errorMsg.style.display = "block";
+  }
+
+  function showSuccess(msg) {
+    errorMsg.style.display = "none";
+    successMsg.innerText = msg;
+    successMsg.style.display = "block";
+  }
+
+  function clearMessages() {
+    errorMsg.style.display = "none";
+    successMsg.style.display = "none";
+  }
+
+  signupBtn.addEventListener("click", async () => {
+    clearMessages();
+
+    const name = nameInput.value.trim();
+    const email = emailInput.value.trim();
+    const password = passwordInput.value;
+
+    if (!name || !email || !password) {
+      showError("All fields are required.");
+      return;
+    }
+
+    if (password.length < 8) {
+      showError("Password must be at least 8 characters long.");
+      return;
+    }
+
+    signupBtn.disabled = true;
+    signupBtn.innerText = "Creating account...";
+
+    try {
+      const res = await fetch("/api/auth/signup", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ name, email, password })
+      });
+
+      const data = await res.json();
+
+      signupBtn.disabled = false;
+      signupBtn.innerText = "Create Account";
+
+      if (!res.ok) {
+        showError(data.message || "Signup failed");
+        return;
+      }
+
+      showSuccess("Account created successfully! Redirecting...");
+      setTimeout(() => window.location.href = "login.html", 1200);
+
+    } catch (err) {
+      signupBtn.disabled = false;
+      signupBtn.innerText = "Create Account";
+      showError("Server error. Please try again.");
+    }
+  });
+</script>
+
+</body>
+</html>

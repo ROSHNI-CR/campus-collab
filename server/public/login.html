@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Sign In · Campus Collab</title>
+
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+    }
+
+    body {
+      min-height: 100vh;
+      background:
+        linear-gradient(rgba(2,6,23,0.8), rgba(2,6,23,0.8)),
+        url("https://images.unsplash.com/photo-1522202176988-66273c2fd55f");
+      background-size: cover;
+      background-position: center;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #e5e7eb;
+    }
+
+    /* ---------- CARD ---------- */
+    .card {
+      background-color: #020617;
+      border: 1px solid #1e293b;
+      border-radius: 20px;
+      padding: 45px 38px;
+      width: 100%;
+      max-width: 420px;
+      animation: fadeSlide 1.3s ease forwards;
+      box-shadow: 0 20px 40px rgba(0,0,0,0.5);
+    }
+
+    h1 {
+      text-align: center;
+      font-size: 2.2rem;
+      margin-bottom: 6px;
+      color: #a5b4fc;
+    }
+
+    .subtitle {
+      text-align: center;
+      font-size: 0.95rem;
+      color: #cbd5f5;
+      margin-bottom: 28px;
+    }
+
+    /* ---------- MESSAGES ---------- */
+    .message {
+      display: none;
+      padding: 11px;
+      border-radius: 10px;
+      font-size: 0.85rem;
+      margin-bottom: 18px;
+      text-align: center;
+    }
+
+    .error {
+      background: rgba(239,68,68,0.15);
+      border: 1px solid #ef4444;
+      color: #fecaca;
+    }
+
+    .success {
+      background: rgba(34,197,94,0.15);
+      border: 1px solid #22c55e;
+      color: #bbf7d0;
+    }
+
+    /* ---------- INPUTS ---------- */
+    .field {
+      position: relative;
+      margin-bottom: 22px;
+    }
+
+    input {
+      width: 100%;
+      padding: 14px;
+      border-radius: 12px;
+      border: 1px solid #1e293b;
+      background-color: #020617;
+      color: #e5e7eb;
+      font-size: 0.95rem;
+      outline: none;
+      transition: border 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    input:focus {
+      border-color: #4f46e5;
+      box-shadow: 0 0 12px rgba(79,70,229,0.6);
+    }
+
+    label {
+      position: absolute;
+      top: -9px;
+      left: 14px;
+      background-color: #020617;
+      padding: 0 6px;
+      font-size: 0.75rem;
+      color: #c7d2fe;
+    }
+
+    /* ---------- BUTTON ---------- */
+    button {
+      width: 100%;
+      padding: 14px;
+      margin-top: 12px;
+      border-radius: 30px;
+      border: none;
+      background-color: #4f46e5;
+      color: white;
+      font-size: 1rem;
+      cursor: pointer;
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    button:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 0 18px rgba(79,70,229,0.8);
+    }
+
+    button:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+      box-shadow: none;
+    }
+
+    /* ---------- LINKS ---------- */
+    .links {
+      display: flex;
+      justify-content: space-between;
+      margin-top: 14px;
+      font-size: 0.85rem;
+    }
+
+    .links a {
+      color: #a5b4fc;
+      text-decoration: none;
+    }
+
+    .footer-text {
+      text-align: center;
+      font-size: 0.85rem;
+      margin-top: 22px;
+      color: #9ca3af;
+    }
+
+    .footer-text a {
+      color: #a5b4fc;
+      text-decoration: none;
+    }
+
+    /* ---------- ANIMATION ---------- */
+    @keyframes fadeSlide {
+      from {
+        opacity: 0;
+        transform: translateY(35px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="card">
+    <h1>Welcome Back</h1>
+    <p class="subtitle">Sign in to continue to Campus Collab</p>
+
+    <!-- Messages -->
+    <div id="errorMsg" class="message error"></div>
+    <div id="successMsg" class="message success"></div>
+
+    <form>
+      <div class="field">
+        <label>Email</label>
+        <input id="email" type="email" placeholder="you@college.edu" />
+      </div>
+
+      <div class="field">
+        <label>Password</label>
+        <input id="password" type="password" placeholder="Your password" />
+      </div>
+
+      <button id="loginBtn" type="button">
+        Sign In
+      </button>
+    </form>
+
+    <div class="links">
+      <a href="#">Forgot password?</a>
+    </div>
+
+    <div class="footer-text">
+      Don’t have an account?
+      <a href="signup.html">Create one</a>
+    </div>
+  </div>
+  <script>
+  const loginBtn = document.getElementById("loginBtn");
+  const errorMsg = document.getElementById("errorMsg");
+  const successMsg = document.getElementById("successMsg");
+
+  loginBtn.addEventListener("click", async () => {
+    const email = document.getElementById("email").value.trim();
+    const password = document.getElementById("password").value.trim();
+
+    // Reset messages
+    errorMsg.style.display = "none";
+    successMsg.style.display = "none";
+
+    if (!email || !password) {
+      errorMsg.innerText = "All fields are required";
+      errorMsg.style.display = "block";
+      return;
+    }
+
+    loginBtn.disabled = true;
+    loginBtn.innerText = "Signing in...";
+
+    try {
+      const res = await fetch("http://localhost:5000/api/auth/login", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({ email, password })
+      });
+
+      const data = await res.json();
+
+      if (!res.ok) {
+        throw new Error(data.message || "Login failed");
+      }
+
+      // ✅ SAVE TOKEN + USER
+      localStorage.setItem("token", data.token);
+      localStorage.setItem("user", JSON.stringify(data.user));
+
+      successMsg.innerText = "Login successful! Redirecting...";
+      successMsg.style.display = "block";
+
+      setTimeout(() => {
+        window.location.href = "/dashboard.html";
+      }, 1200);
+
+    } catch (err) {
+      errorMsg.innerText = err.message;
+      errorMsg.style.display = "block";
+    } finally {
+      loginBtn.disabled = false;
+      loginBtn.innerText = "Sign In";
+    }
+  });
+</script>
+
+
+</body>
+</html>
