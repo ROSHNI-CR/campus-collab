@@ -199,8 +199,7 @@ Through this project I gained practical experience in:
 GitHub:  
 https://github.com/ROSHNI-CR
 
-LinkedIn:  
-(Add LinkedIn Link)
+
 
 ---
 
