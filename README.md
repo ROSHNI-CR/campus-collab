@@ -1,154 +1,213 @@
-# 🎓 CampusCollab – Real-Time Student Collaboration Platform
+<div align="center">
 
-CampusCollab is a full-stack web application designed to help students collaborate efficiently through study rooms and real-time communication.
+# 🎓 CampusCollab
 
-The platform enables users to create accounts, join discussions, communicate instantly using live chat, and interact in a structured collaborative environment.
+### Real-Time Student Collaboration Platform
 
----
+Connect • Study • Collaborate • Build
 
-## 🚀 Features
+[🎥 Watch Project Demo](https://drive.google.com/drive/folders/18RNHQTRMjpXpW5IFSADdROD2uA7CZ_Kz?usp=sharing)
 
-### 🔐 Authentication & Security
-- User Registration and Login
-- JWT-based Authentication
-- Password Encryption using bcrypt
-- Protected Routes
-
-### 💬 Real-Time Collaboration
-- Instant Group Messaging
-- Study Room Based Communication
-- Live Updates using Socket.io
-- Persistent Chat Experience
-
-### 📚 Student Productivity
-- Collaborative Study Environment
-- Organized Interaction Flow
-- Responsive Interface
+</div>
 
 ---
 
-## 🛠 Tech Stack
+# 📌 Overview
+
+CampusCollab is a full-stack student collaboration platform designed to make studying and communication more interactive.
+
+The platform allows students to connect with peers, communicate through real-time chat, join study rooms, collaborate on ideas, and manage their activities through a centralized dashboard.
+
+This project focuses on creating a collaborative digital campus experience using real-time technologies.
+
+---
+
+# ✨ Features
+
+### 🔐 Authentication
+
+* User Signup
+* Secure Login
+* JWT Authentication
+* Session Persistence
+
+### 💬 Real-Time Group Chat
+
+* Live messaging
+* Real-time updates
+* Group communication
+
+### 📚 Study Rooms
+
+* Create study spaces
+* Join collaborative rooms
+* Subject-focused discussions
+
+### 🚀 Project Collaboration
+
+* Explore project spaces
+* Collaborate with peers
+
+### 👤 Dashboard
+
+* Personalized experience
+* Quick navigation
+* User session handling
+
+---
+
+# 🖥 Screenshots
+
+
+## Landing Page
+
+<img width="1888" height="861" alt="dashboard" src="https://github.com/user-attachments/assets/7f7f788c-23e8-4d6d-8ced-1461dfaf1948" />
+
+
+
+---
+
+## Sign Up
+
+<img width="1907" height="865" alt="account" src="https://github.com/user-attachments/assets/16f4b77e-58cc-49aa-9e66-c4e5937670d7" />
+
+
+---
+
+## Sign In
+
+<img width="1917" height="845" alt="signin" src="https://github.com/user-attachments/assets/f5e2ff44-b38b-497b-80d0-600a48a184c4" />
+
+
+---
+
+## Dashboard
+
+<img width="1878" height="846" alt="index" src="https://github.com/user-attachments/assets/a1b319c1-a158-4876-ae68-c3e3db6f5655" />
+
+
+---
+
+## Group Chat
+
+<img width="1883" height="857" alt="chat" src="https://github.com/user-attachments/assets/0e20f06b-d5b8-4aa0-9b38-05447fad2b8b" />
+
+
+---
+
+# 🛠 Tech Stack
 
 ### Frontend
-- HTML
-- CSS
-- JavaScript
+
+* HTML
+* CSS
+* JavaScript
 
 ### Backend
-- Node.js
-- Express.js
+
+* Node.js
+* Express.js
 
 ### Database
-- MongoDB
-- Mongoose
+
+* MongoDB Atlas
 
 ### Authentication
-- JWT
-- bcrypt
+
+* JWT (JSON Web Token)
 
 ### Real-Time Communication
-- Socket.io
+
+* Socket.io
 
 ---
 
-## 🏗 System Architecture
+# ⚙ Installation & Setup
 
-```plaintext
-Frontend (HTML/CSS/JS)
-          │
-          ▼
-Node.js + Express Server
-          │
- ┌────────┴────────┐
- ▼                 ▼
-MongoDB        Socket.io
-(Database)    (Real-Time Chat)
-```
-
----
-
-## 📸 Screenshots
-
-### Login Page
-(Add Screenshot)
-
-### Dashboard
-(Add Screenshot)
-
-### Study Room
-(Add Screenshot)
-
-### Real-Time Chat
-(Add Screenshot)
-
----
-
-## ⚙️ Installation & Setup
-
-### Clone Repository
+## 1. Clone Repository
 
 ```bash
 git clone https://github.com/ROSHNI-CR/campus-collab.git
 ```
 
-### Move into project directory
+Move inside project:
 
 ```bash
 cd campus-collab
 ```
 
-### Install dependencies
+---
+
+## 2. Install Dependencies
+
+Install backend packages:
 
 ```bash
 npm install
 ```
 
-### Configure Environment Variables
+---
 
-Create `.env`
+## 3. Configure Environment Variables
+
+Create a `.env` file in root directory.
+
+Add:
 
 ```env
-PORT=5000
-MONGO_URI=your_mongodb_url
-JWT_SECRET=your_secret
-```
-
-### Run application
-
-```bash
-npm start
-```
-
-or
-
-```bash
-npm run dev
-```
-
-Open:
-
-```plaintext
-http://localhost:5000
+MONGO_URI=your_mongodb_connection_string
+PORT=5001
+JWT_SECRET=your_secret_key
 ```
 
 ---
 
-## 📂 Project Structure
+## 4. Start Server
 
-```plaintext
-CampusCollab
+```bash
+npm run server
+```
+
+You should see:
+
+```txt
+Server running on http://localhost:5001
+MongoDB connected successfully
+```
+
+---
+
+## 5. Open Application
+
+Visit:
+
+```txt
+http://localhost:5001
+```
+
+Create account → Login → Explore dashboard.
+
+---
+
+# 📂 Project Structure
+
+```txt
+campus-collab/
 │
-├── client/
-│   ├── pages
-│   ├── assets
-│   └── styles
+├── public/
+│   ├── index.html
+│   ├── signup.html
+│   ├── login.html
+│   ├── dashboard.html
+│   ├── group-chat.html
+│   ├── profile.html
+│   ├── study-rooms.html
 │
 ├── server/
-│   ├── routes
-│   ├── models
-│   ├── middleware
-│   ├── controllers
-│   └── socket
+│   ├── config/
+│   ├── middleware/
+│   ├── models/
+│   ├── routes/
 │
 ├── .env
 ├── package.json
@@ -157,52 +216,39 @@ CampusCollab
 
 ---
 
-## 🔄 Application Workflow
+# 🚀 Future Improvements
 
-1. User creates account or logs in  
-2. Authentication validates access  
-3. User joins study room  
-4. Messages sent through Socket.io  
-5. Chat updates in real time  
-6. Data stored and retrieved from MongoDB  
-
----
-
-## 🎯 Learning Outcomes
-
-Through this project I gained practical experience in:
-
-- Full-Stack Web Development
-- REST API Integration
-- Real-Time Communication
-- Authentication & Authorization
-- Database Design
-- Client–Server Architecture
+* Notifications
+* Better UI/UX
+* Video collaboration
+* AI-powered recommendations
+* Responsive mobile optimization
+* Analytics dashboard
 
 ---
 
-## 🔮 Future Improvements
+# 📚 Learning Outcomes
 
-- Video Calling
-- Notifications
-- File Sharing
-- Dark Mode
-- AI-Based Study Suggestions
-- Group Management
+Through this project I explored:
+
+* Full-stack web development
+* Authentication workflows
+* Database integration
+* Real-time communication
+* UI/UX design
+* API integration
 
 ---
 
-## 👩‍💻 Author
+# 👩‍💻 Author
 
-**Roshni Khanam**
+### Roshni Khanam
 
-GitHub:  
+B.Tech Final Year
+
+GitHub:
 https://github.com/ROSHNI-CR
 
-
-
 ---
 
-## ⭐ Support
-
-If you found this project useful, consider giving it a star.
+⭐ If you found this project interesting, consider starring the repository.
