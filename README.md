@@ -61,7 +61,10 @@ This project focuses on creating a collaborative digital campus experience using
 
 ## Landing Page
 
-<img width="1888" height="861" alt="dashboard" src="https://github.com/user-attachments/assets/7f7f788c-23e8-4d6d-8ced-1461dfaf1948" />
+<img width="1872" height="862" alt="landingpage" src="https://github.com/user-attachments/assets/6dcf7f6d-29ab-49a8-bb00-e1b4e41f3080" />
+<img width="1890" height="862" alt="dashboard2" src="https://github.com/user-attachments/assets/bcb55986-de3e-4709-8364-b2a9b76b3406" />
+<img width="1882" height="855" alt="dashboard3" src="https://github.com/user-attachments/assets/b1bd73b9-1a02-4142-8fa4-893ffebe9b18" />
+
 
 
 
